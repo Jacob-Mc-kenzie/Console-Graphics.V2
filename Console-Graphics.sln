@@ -7,6 +7,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestApp", "TestApp\TestApp.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CompactGraphics", "CompactGraphics\CompactGraphics.csproj", "{0EF49345-41C4-4397-A1E1-F3E7F4245423}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{74C854E3-F6A4-46ED-8C04-25FADD6E00B8}"
+	ProjectSection(SolutionItems) = preProject
+		LICENSE = LICENSE
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
