@@ -11,7 +11,7 @@ namespace CompactGraphics
         ConsoleColor ClickColor;
         ConsoleColor tempfor, tempback;
         int mouseDown;
-        Func<Mouse, int> OnClick;
+        Func<Input, int> OnClick;
         public Button(Rect bounds, string text) : base(text, bounds)
         {
             forColor = ConsoleColor.Black;
@@ -20,7 +20,7 @@ namespace CompactGraphics
             ClickColor = ConsoleColor.DarkGray;
             tempfor = ConsoleColor.Black;
             mouseDown = 0;
-            OnClick = (Mouse i) => { return -1; };
+            OnClick = (Input i) => { return -1; };
         }
         public Button(Rect bounds, string text, ConsoleColor forground, ConsoleColor background) : this(bounds, text)
         {
@@ -33,7 +33,7 @@ namespace CompactGraphics
             this.ClickColor = click_bg;
             this.tempfor = mouse_fg;
         }
-        public void BindOnClick(Func<Mouse, int> method)
+        public void BindOnClick(Func<Input, int> method)
         {
             this.OnClick = method;
         }
@@ -50,7 +50,7 @@ namespace CompactGraphics
             }
         }
 
-        public override void Draw(Graphics g, Mouse mouse)
+        public override void Draw(Graphics g, Input mouse)
         {
             int[] m = mouse.GetMouse();
             if (Bounds.Overlaps(m[0], m[1]))

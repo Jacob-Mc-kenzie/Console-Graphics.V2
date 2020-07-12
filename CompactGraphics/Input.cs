@@ -7,18 +7,19 @@ using System;
 namespace CompactGraphics
 {
 
-    public class Mouse
+    public class Input
     {
         NativeMethods.ConsoleHandle handle;
         NativeMethods.INPUT_RECORD record;
         Thread updateThread;
         int mode;
         public bool KeyAvalible = false;
+        private bool quit = false;
         private int x = 0, y = 0;
         private char c = '\0';
         private int butstate = 0;
         uint recordLen = 0;
-        public Mouse()
+        public Input()
         {
             handle = NativeMethods.GetStdHandle(NativeMethods.STD_INPUT_HANDLE);
 
@@ -40,7 +41,7 @@ namespace CompactGraphics
 
         private async void UpdateThread()
         {
-            while (true)
+            while (!quit)
             {
                 if (!(await Task.Run(()=> {return NativeMethods.ReadConsoleInput(handle, ref record, 1, ref recordLen); }))) { throw new Win32Exception(); }
                 switch (record.EventType)
@@ -63,6 +64,10 @@ namespace CompactGraphics
                         break;
                 }
             }
+        }
+        public void Quit()
+        {
+            quit = true;
         }
         /// <summary>
         /// If a key is avalible return it.

@@ -72,7 +72,7 @@
         {
             throw new System.NotImplementedException();
         }
-        public virtual void Draw(Graphics g, Mouse mouse)
+        public virtual void Draw(Graphics g, Input mouse)
         {
             Draw(g);
             //throw new System.NotImplementedException();
