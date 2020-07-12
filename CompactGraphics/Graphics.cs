@@ -163,6 +163,13 @@ namespace CompactGraphics
         }
         #endregion
         /// <summary>
+        /// Initilise the virtual screen at the currrent cosole dimensions.
+        /// </summary>
+        public Graphics() : this(Console.WindowWidth, Console.WindowHeight)
+        {
+
+        }
+        /// <summary>
         /// Initilises the Virtual screen.
         /// </summary>
         /// <param name="w">width of the screen</param>
