@@ -9,12 +9,12 @@ namespace TestApp
         static void Main(string[] args)
         {
             Graphics graphics = new Graphics();
-
+            ExampleMenu menu = new ExampleMenu(graphics);
             //Contunually draw frames
             while (true)
             {
-                //draw the frame counter at the top of the screen.
-                graphics.Draw($"Fps: {graphics.Fps}", ConsoleColor.White, 0, 0);
+                //update the UI
+                menu.StepFrame();
                 //now that all drawing is done, push the frame to the buffer.
                 graphics.pushFrame();
             }
