@@ -26,11 +26,11 @@ namespace CompactGraphics
         /// Creates a New simple Frame
         /// </summary>
         /// <param name="c">The border character</param>
+        /// <param name="r">The bounding box to draw to</param>
         /// <param name="forcolor">The color of the border</param>
         /// <param name="backcolor">The color of the background</param>
-        /// <param name="r">The bounding box to draw to</param>
         /// <param name="p">The Relative pin direction</param>
-        public Frame(char c,ConsoleColor forcolor, ConsoleColor backcolor, Rect r, DrawPoint p) :this(c,r)
+        public Frame(char c,Rect r, ConsoleColor forcolor, ConsoleColor backcolor, DrawPoint p) :this(c,r)
         {
             this.forColor = forcolor;
             this.backcolor = backcolor;
@@ -55,6 +55,11 @@ namespace CompactGraphics
 
 
         public override void Draw(Graphics g, ConsoleKeyInfo keyInfo)
+        {
+            Draw(g);
+        }
+
+        public override void Draw(Graphics g, Input I)
         {
             Draw(g);
         }

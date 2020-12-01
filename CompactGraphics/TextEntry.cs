@@ -1,4 +1,7 @@
-﻿namespace CompactGraphics
+﻿using System;
+using System.Timers;
+
+namespace CompactGraphics
 {
     /// <summary>
     /// A simnple Widget based single line text entry feild.
@@ -6,9 +9,9 @@
     public class TextEntry : Widget
     {
         private string text;
-        private System.ConsoleColor flashColor;
+        private ConsoleColor flashColor;
         public string Text { get { return text; } }
-        private System.Timers.Timer eventDelay;
+        private Timer eventDelay;
         /// <summary>
         /// Creates a Text entry widget, single line with scrolling overflow.
         /// </summary>
@@ -17,17 +20,17 @@
         /// <param name="maxlenght"></param>
         public TextEntry(int x, int y, int maxlenght)
         {
-            eventDelay = new System.Timers.Timer(200);
+            eventDelay = new Timer(200);
             this.text = "";
             this.baseBounds = new Rect(x, x + maxlenght, y, y + 1);
             this.Pin = DrawPoint.TopLeft;
             this.Bounds = new Rect(x, x + maxlenght, y, y + 1);
-            this.forColor = System.ConsoleColor.White;
+            this.forColor =ConsoleColor.White;
         }
 
         /// <param name="forground">The color of the text</param>
         /// <param name="placeholder">The text to start with</param>
-        public TextEntry(int x, int y, int maxlenght, System.ConsoleColor forground, string placeholder) : this(x,y,maxlenght)
+        public TextEntry(int x, int y, int maxlenght,ConsoleColor forground, string placeholder) : this(x,y,maxlenght)
         {
             this.forColor = forground;
             this.text = placeholder;
@@ -36,7 +39,7 @@
         /// Change the forgroud color of the specified widget for 200 ms
         /// </summary>
         /// <param name="color">the color to flash to</param>
-        public void Flash(System.ConsoleColor color)
+        public void Flash(ConsoleColor color)
         {
             flashColor = forColor;
             forColor = color;
@@ -47,7 +50,7 @@
         /// <summary>
         /// Callback for the event timer.
         /// </summary>
-        private void Delayed_Flash(object sender, System.Timers.ElapsedEventArgs e)
+        private void Delayed_Flash(object sender, ElapsedEventArgs e)
         {
             forColor = flashColor;
         }
@@ -87,13 +90,13 @@
         /// </summary>
         /// <param name="g"></param>
         /// <param name="keyInfo"></param>
-        public override void Draw(Graphics g, System.ConsoleKeyInfo keyInfo)
+        public override void Draw(Graphics g, ConsoleKeyInfo keyInfo)
         {
-            if (keyInfo.Key != System.ConsoleKey.Backspace)
+            if (keyInfo.Key != ConsoleKey.Backspace)
             {
                 text += keyInfo.KeyChar;
             }
-            else if (keyInfo.Key == System.ConsoleKey.Backspace)
+            else if (keyInfo.Key == ConsoleKey.Backspace)
             {
                 if(text.Length > 0)
                     text = text.Remove(text.Length - 1);

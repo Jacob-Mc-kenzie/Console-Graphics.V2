@@ -40,13 +40,12 @@ namespace CompactGraphics
 
         public override void Draw(Graphics g)
         {
-            for (int i = 0; i < lines.Count; i++)
+            for (int i = 0; i < Bounds.y2 - Bounds.y1; i++)
             {
-                if (Bounds.y1 + i < Bounds.y2)
-                {
-                    g.Draw(lines[i], forColor, Bounds.x1, Bounds.y1 + i);
-                    g.DrawBGRectangle(backColor, Bounds.x1, Bounds.x2, Bounds.y1 + i, Bounds.y1 + i +1);
-                }
+                if(i < lines.Count)
+                    if (Bounds.y1 + i < Bounds.y2)
+                        g.Draw(lines[i], forColor, Bounds.x1, Bounds.y1 + i);
+                g.DrawBGRectangle(backColor, Bounds.x1, Bounds.x2, Bounds.y1 + i, Bounds.y1 + i +1);
             }
         }
 
@@ -81,7 +80,7 @@ namespace CompactGraphics
                     if (Bounds.y1 + i < Bounds.y2)
                     {
                         g.Draw(lines[i], tempfor, Bounds.x1, Bounds.y1 + i);
-                        g.DrawBGRectangle(tempback, Bounds.x1, Bounds.x2-1, Bounds.y1 + i, Bounds.y1 + i+1);
+                        g.DrawBGRectangle(tempback, Bounds.x1, Bounds.x2-1, Bounds.y1 + i, Bounds.y1 + i);
                     }
                 }
         }

@@ -10,7 +10,7 @@
         {
 
         }
-        public Widget(Rect bounds)
+        internal Widget(Rect bounds)
         {
             this.baseBounds = bounds;
             this.Bounds = bounds;
@@ -72,7 +72,7 @@
         {
             throw new System.NotImplementedException();
         }
-        public virtual void Draw(Graphics g, Input mouse)
+        public virtual void Draw(Graphics g, Input input)
         {
             Draw(g);
             //throw new System.NotImplementedException();

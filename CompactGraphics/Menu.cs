@@ -23,8 +23,7 @@ namespace CompactGraphics
         protected int status;
         public Menu()
         {
-            g = new Graphics(Console.WindowWidth, Console.WindowHeight);
-            onPage = new List<Widget>();
+            throw new Exception("Cannot call default constructor");
         }
         public Menu(Graphics g)
         {
@@ -43,7 +42,7 @@ namespace CompactGraphics
             }
         }
         /// <summary>
-        /// Steps to the next frame by adding all the widgets to teh current frame, giving them the users input.
+        /// Steps to the next frame by adding all the widgets to the current frame, giving them the users input.
         /// </summary>
         /// <param name="keyinfo">The input to handle</param>
         public virtual void StepFrame(ConsoleKeyInfo keyinfo)
@@ -51,6 +50,17 @@ namespace CompactGraphics
             foreach (Widget widget in onPage)
             {
                 widget.Draw(g, keyinfo);
+            }
+        }
+        /// <summary>
+        /// Steps to the next frame by adding all the widgets to the current frame, giving them the users input.
+        /// </summary>
+        /// <param name="input">The input to handle</param>
+        public virtual void StepFrame(Input input)
+        {
+            foreach (Widget widget in onPage)
+            {
+                widget.Draw(g, input);
             }
         }
     }

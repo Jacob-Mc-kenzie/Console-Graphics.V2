@@ -9,6 +9,10 @@ namespace CompactGraphics
 
     public class Input
     {
+        //===================
+        // ToDo:
+        // more advanced key state, support for paste, keydown, repeatkey etc.
+        //===================
         NativeMethods.ConsoleHandle handle;
         NativeMethods.INPUT_RECORD record;
         Thread updateThread;

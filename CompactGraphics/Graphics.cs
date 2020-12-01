@@ -21,7 +21,7 @@ namespace CompactGraphics
             image = new char[h + 1][];
             background = new ConsoleColor[h + 1][];
             forground = new ConsoleColor[h + 1][];
-            for (int i = 0; i < h; i++)
+            for (int i = 0; i <= h; i++)
             {
                 image[i] = new char[w + 1];
                 forground[i] = new ConsoleColor[w + 1];
@@ -52,7 +52,7 @@ namespace CompactGraphics
         /// To add, carosell like barrier X for stratup, lists, radio buttons, password entry.
         /// 
         ///
-        private int framedelay = 3; // the delay between buffered frames being drawn.
+        private int framedelay = 0; // the delay between buffered frames being drawn.
         private int maxQueueLength; // The maximum lenght of the buffer.
         private TFrame currentFrame;
         private Queue<TFrame> frameQueue;
