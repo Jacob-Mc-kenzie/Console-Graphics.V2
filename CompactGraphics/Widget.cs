@@ -62,6 +62,7 @@
         public virtual void Draw(Graphics g)
         {
             g.Draw(rendered, Bounds.x1, Bounds.y1);
+            rendered = new TFrame(Bounds.x2 - Bounds.x1, Bounds.y2 - Bounds.y1);
         }
         /// <summary>
         /// Draws the widget to the current frame, after evaluating updating input.

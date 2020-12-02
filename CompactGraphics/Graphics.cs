@@ -179,6 +179,7 @@ namespace CompactGraphics
             // Initilisation=================================
             Console.SetWindowSize(w, h);
             Console.CursorVisible = false;
+            //Console.OutputEncoding = System.Text.Encoding.ASCII;
             currentFrame = new TFrame(w, h);
             frameQueue = new Queue<TFrame>();
             buf = new CharInfo[w * h];
