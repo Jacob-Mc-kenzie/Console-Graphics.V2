@@ -64,9 +64,11 @@ namespace CompactGraphics
         /// The height of the virtual screen.
         /// </summary>
         public int Height { get; private set; }
+        public int TimeToFrame { get; private set; }
         private bool keepgoing = true;
         private int frame_Counter = 45;
         private int fps = 45;
+        private int timeOfLastFrame = 0;
         private SafeFileHandle f;
         CharInfo[] buf;
         SmallRect rect;
@@ -263,7 +265,7 @@ namespace CompactGraphics
             {
                 if (frameQueue.Count >= 1)
                     update(frameQueue.Dequeue());
-                Thread.Sleep(framedelay);
+                //Thread.Sleep(framedelay);
                 
             }
         }
@@ -287,7 +289,10 @@ namespace CompactGraphics
                 frameQueue.Enqueue(currentFrame);
                 currentFrame = new TFrame(Width,Height);
             }
-            Thread.Sleep(FrameTime);
+            TimeToFrame = Math.Max(0,DateTime.Now.Millisecond - timeOfLastFrame);
+            
+            //Thread.Sleep(FrameTime);
+            timeOfLastFrame = System.DateTime.Now.Millisecond;
         }
 
         /// <summary>
