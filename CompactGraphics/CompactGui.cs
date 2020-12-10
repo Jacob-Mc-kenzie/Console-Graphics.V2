@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace CompactGraphics
+namespace ComapactGraphicsV2
 {
     /// <summary>
     /// A simple structure to store the bounds of a rectangle;

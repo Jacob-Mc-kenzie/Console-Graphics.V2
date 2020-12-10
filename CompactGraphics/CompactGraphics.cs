@@ -4,8 +4,9 @@ using System.IO;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Threading;
+using System.Drawing;
 
-namespace CompactGraphics
+namespace ComapactGraphicsV2
 {
     /// <summary>
     /// A datastructure containing the three screen buffers in a given frame.
@@ -15,9 +16,13 @@ namespace CompactGraphics
         public char[][] image;
         public ConsoleColor[][] background;
         public ConsoleColor[][] forground;
+        public Color[] framePallet;
+        public int palletLocation;
 
         public TFrame(int w, int h)
         {
+            framePallet = new Color[16];
+            palletLocation = 0;
             image = new char[h + 1][];
             background = new ConsoleColor[h + 1][];
             forground = new ConsoleColor[h + 1][];
@@ -36,17 +41,27 @@ namespace CompactGraphics
             }
         }
 
-        public TFrame(char[][] image, ConsoleColor[][] background, ConsoleColor[][] forground)
+        public TFrame(char[][] image, ConsoleColor[][] background, ConsoleColor[][] forground, Color[] pallet)
         {
+            palletLocation = 0;
             this.image = image;
             this.background = background;
             this.forground = forground;
+            this.framePallet = pallet;
+        }
+        public TFrame(char[][] image, ConsoleColor[][] background, ConsoleColor[][] forground)
+        {
+            palletLocation = 0;
+            this.image = image;
+            this.background = background;
+            this.forground = forground;
+            this.framePallet = new Color[16];
         }
     }
     /// <summary>
     /// A compacted console visual libary of mine with GUI centered features.
     /// </summary>
-    public class Graphics
+    public class CompactGraphics
     {
         /// 
         /// To add, carosell like barrier X for stratup, lists, radio buttons, password entry.
@@ -65,10 +80,12 @@ namespace CompactGraphics
         /// </summary>
         public int Height { get; private set; }
         public int TimeToFrame { get; private set; }
+        public int TimeToDraw { get; private set; }
         private bool keepgoing = true;
         private int frame_Counter = 45;
         private int fps = 45;
         private int timeOfLastFrame = 0;
+        private int timeOfLastDraw = 0;
         private SafeFileHandle f;
         CharInfo[] buf;
         SmallRect rect;
@@ -128,6 +145,7 @@ namespace CompactGraphics
           Coord dwBufferCoord,
           ref SmallRect lpWriteRegion);
 
+
         [StructLayout(LayoutKind.Sequential)]
         public struct Coord
         {
@@ -163,11 +181,12 @@ namespace CompactGraphics
             public short Right;
             public short Bottom;
         }
+        
         #endregion
         /// <summary>
         /// Initilise the virtual screen at the currrent cosole dimensions.
         /// </summary>
-        public Graphics() : this(Console.WindowWidth, Console.WindowHeight)
+        public CompactGraphics() : this(Console.WindowWidth, Console.WindowHeight)
         {
 
         }
@@ -176,7 +195,7 @@ namespace CompactGraphics
         /// </summary>
         /// <param name="w">width of the screen</param>
         /// <param name="h">height of the screen</param>
-        public Graphics(int w, int h)
+        public CompactGraphics(int w, int h)
         {
             // Initilisation=================================
             Console.SetWindowSize(w, h);
@@ -208,7 +227,7 @@ namespace CompactGraphics
         /// <param name="w">The desired width</param>
         /// <param name="h">The desired height</param>
         /// <param name="queueLength">The maximum number of frames to buffer</param>
-        public Graphics(int w, int h, int queueLength) :this(w,h)
+        public CompactGraphics(int w, int h, int queueLength) :this(w,h)
         {
             maxQueueLength = queueLength;
         }
@@ -233,6 +252,11 @@ namespace CompactGraphics
         {
             if (!f.IsInvalid)
             {
+                    for (int i = 0; i < screen.framePallet.Length; i++)
+                    {
+                       var tmp = !screen.framePallet[i].IsEmpty ? ExtendedColors.SetColor((ConsoleColor)i, screen.framePallet[i]) : i;
+                    }
+                
                 int y, x;
                 //generate the buffer
                 for (int i = 0; i < buf.Length; ++i)
@@ -264,9 +288,14 @@ namespace CompactGraphics
             while (keepgoing)
             {
                 if (frameQueue.Count >= 1)
+                {
+                    timeOfLastDraw = DateTime.Now.Millisecond;
                     update(frameQueue.Dequeue());
-                //Thread.Sleep(framedelay);
+                    TimeToDraw = Math.Max(0, DateTime.Now.Millisecond - timeOfLastDraw);
+                }
                 
+                //Thread.Sleep(framedelay);
+
             }
         }
         /// <summary>
@@ -305,6 +334,12 @@ namespace CompactGraphics
             updateThread.Abort();
         }
 
+        
+
+        public void AddToPallet(Color color, ConsoleColor inplaceof)
+        {
+            currentFrame.framePallet[(int)inplaceof] = color;
+        }
 
         /// <summary>
         /// Add a character to the current frame.
@@ -376,6 +411,14 @@ namespace CompactGraphics
             }
         }
 
+        public void DrawBackground(int palletIndex, int x, int y)
+        {
+            if (x <= Width && y <= Height && x >= 0 && y >= 0)
+            {
+                currentFrame.background[y][x] = (ConsoleColor)palletIndex;
+            }
+        }
+
         public void DrawRectangle(char c, ConsoleColor color, int x1, int x2, int y1, int y2)
         {
             for (int i = x1; i <= x2; i++)
@@ -394,6 +437,30 @@ namespace CompactGraphics
                 {
                     this.DrawBackground(color, i, j);
                 }
+            }
+        }
+
+        public void DrawANSI(string st, int x, int y)
+        {
+            if (y <= Height)
+            {
+                for (int i = 0; i < st.Length; i++)
+                {
+                    if (x + i <= Width && x + i >= 0)
+                    {
+                        currentFrame.image[y][x + i] = st[i];
+                        
+                    }
+                }
+            }
+
+        }
+
+        public void DrawANSI(char c, int x, int y)
+        {
+            if (x < Width && y < Height && x >= 0 && y >= 0)
+            {
+                currentFrame.image[y][x] = c;
             }
         }
 

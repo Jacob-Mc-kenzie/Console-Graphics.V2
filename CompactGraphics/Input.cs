@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using System;
 
 
-namespace CompactGraphics
+namespace ComapactGraphicsV2
 {
 
     public class Input

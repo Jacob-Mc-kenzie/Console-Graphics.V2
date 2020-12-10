@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace CompactGraphics
+namespace ComapactGraphicsV2
 {
     /// <summary>
     /// A base for Widget Based Menus
@@ -11,7 +11,7 @@ namespace CompactGraphics
         /// <summary>
         /// The graphics object to link to
         /// </summary>
-        protected Graphics g;
+        protected CompactGraphics g;
         /// <summary>
         /// The list of widgets on page, in draw order.
         /// </summary>
@@ -25,7 +25,7 @@ namespace CompactGraphics
         {
             throw new Exception("Cannot call default constructor");
         }
-        public Menu(Graphics g)
+        public Menu(CompactGraphics g)
         {
             this.g = g;
             onPage = new List<Widget>();

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using CompactGraphics;
+using ComapactGraphicsV2;
 
 namespace TestApp
 {
@@ -18,30 +18,13 @@ namespace TestApp
         int cloc = 1000;
         int bounce = 0;
         bool t = true;
-        int cof = 0;
-        public ExampleMenu(Graphics graphics) : base(graphics)
+        int cof = 15;
+        int[] rgb = new int[] { 255, 0, 0 };
+        public ExampleMenu(ComapactGraphicsV2.CompactGraphics graphics) : base(graphics)
         {
-            //onPage.Add(new Frame('#', new Rect(0, 5, 0, 5)));
-            //Random rng = new Random();
-            //List<Rect> existing = new List<Rect>();
-            //for (int i = 0; i < 5; i++)
-            //{
-            //    int x1, x2, y1, y2;
-            //    x1 = rng.Next(1, Console.WindowWidth-9);
-            //    x2 = x1 + 8;
-            //    y1 = rng.Next(1, Console.WindowHeight - 5);
-            //    y2 = y1 + 4;
-            //    Rect r = new Rect(x1, x2, y1, y2);
-            //    if(existing.Count != 0)
-            //        foreach (var item in existing)
-            //        {
-            //            item
-            //        }
-            //    onPage.Add(new Button(new Rect(x1, x2, y1, y2), $"This is some text {i}"));
-            //}
             test = new Frame('#', new Rect(1, 9, 1, 9),ConsoleColor.White,ConsoleColor.Black, Widget.DrawPoint.Center);
             onPage.Add(test);
-            r = new Rect(20, 100, 5, 35);
+            r = new Rect(20, 80, 5, 35);
             content = new Life(80, 60, 100, 50);
             pixelGrid = new PixelGrid(r);
             onPage.Add(pixelGrid);
@@ -53,15 +36,9 @@ namespace TestApp
         {
             base.StepFrame(input);
             //content.Step(pixelGrid);
-            for (int i = 0; i < g.Width; i++)
-            {
-                for (int j = 0; j < g.Height; j++)
-                {
-                    g.Draw('@', ConsoleColor.Green, i, j);
-                }
-            }
-            StepGrid2(pixelGrid,pixelGrid.Width,pixelGrid.Height, t);
-            //cof++;
+
+            StepGrid3(pixelGrid,pixelGrid.Width,pixelGrid.Height);
+            //cof = (cof - 1) < 0 ? 15 : cof -1;
             //t = !t;
             //pixelGrid.DrawPixel(5, 4);
             int[] m = input.GetMouse();
@@ -82,9 +59,6 @@ namespace TestApp
 
             }
             bounce++;
-            g.Draw($"lastk: {lastknown}", ConsoleColor.Yellow, 0, 3);
-            g.Draw($"character: {(char)cloc}", ConsoleColor.White, 0, 4);
-            g.Draw($"code: {cloc}", ConsoleColor.White, 0, 5);
             test.ReSize(new Rect(m[0], m[0] + 8, m[1], m[1] + 8));
             if (r.Overlaps(test.Bounds))
             {
@@ -97,15 +71,15 @@ namespace TestApp
 
         private void StepGrid(PixelGrid grid,int w, int h, int coloroffset)
         {
-            grid.DrawPixel(25, coloroffset % h);
-            //for (int i = 0; i < w; i++)
-            //{
-                //for (int j = 0; j < h; j++)
-                //{
-                //    grid.DrawPixel(i, j, colors[(j+coloroffset) % 15] == ConsoleColor.White ? ConsoleColor.White : ConsoleColor.Black);
-                    //grid.DrawPixel(i, j, colors[(i+coloroffset) % 14]);
-                //}
-            //}
+            //grid.DrawPixel(25, coloroffset % h);
+            for (int i = 0; i < w; i++)
+            {
+                for (int j = 0; j <= i; j++)
+                {
+                    grid.DrawPixel(i, j, colors[(i + coloroffset) % 15]);
+                    grid.DrawPixel(j, i, colors[(i + coloroffset) % 15]);
+                }
+            }
         }
         private void StepGrid2(PixelGrid grid, int w, int h, bool togglestate)
         {
@@ -120,6 +94,49 @@ namespace TestApp
                 }
                 toggle = !toggle;
             }
+        }
+        private void StepGrid3(PixelGrid grid, int w, int h)
+        {
+            int lines = w / 15;
+            int color = 1;
+            for (int x = 0; x < w; x++)
+            {
+                switch(x % lines)
+                {
+                    case 0:
+                        color++;
+                        break;
+                    default:
+                        for (int y = 0; y < h; y++)
+                        {
+                            grid.DrawPixel(x, y, (ConsoleColor)color);
+                        }
+                        break;
+
+                }
+            }
+            for (int i = 1; i < 16; i++)
+            {
+                rgb = stepRainbow(rgb);
+                ExtendedColors.SetColor((ConsoleColor)i, System.Drawing.Color.FromArgb(rgb[0], rgb[1], rgb[2]));
+            }
+        }
+        private int[] stepRainbow(int[] from)
+        {
+            if (from[0] == 255 && from[2] < 255 && from[1] == 0)
+                from[2] += 15;
+            else if (from[2] == 255 && from[0] > 0)
+                from[0] -= 15;
+            else if (from[2] == 255 && from[1] < 255)
+                from[1] += 15;
+            else if (from[1] == 255 && from[2] > 0)
+                from[2] -= 15;
+            else if (from[1] == 255 && from[0] < 255)
+                from[0] += 15;
+            else
+                from[1] -= 15;
+
+            return from;
         }
     }
 }

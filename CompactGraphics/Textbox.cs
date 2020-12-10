@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-namespace CompactGraphics
+namespace ComapactGraphicsV2
 {
     /// <summary>
     /// A simple Widget based textbox, read only, acts like a WinForms Label kind of.
@@ -67,7 +67,7 @@ namespace CompactGraphics
             forColor = flashColor;
         }
 
-        public override void Draw(Graphics g)
+        public override void Draw(CompactGraphics g)
         {
             for (int i = 0; i < lines.Count; i++)
             {
@@ -86,7 +86,7 @@ namespace CompactGraphics
         {
             lines = text.Wrap(Math.Abs(baseBounds.x2 - baseBounds.x1));
         }
-        public override void Draw(Graphics g, ConsoleKeyInfo keyInfo)
+        public override void Draw(CompactGraphics g, ConsoleKeyInfo keyInfo)
         {
             Draw(g);
             //ToDo

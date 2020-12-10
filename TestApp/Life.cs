@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using CompactGraphics;
+using ComapactGraphicsV2;
 
 namespace TestApp
 {
@@ -47,7 +47,7 @@ namespace TestApp
                     else
                         cells[i][j] = (!new int[] { 0, 4 }.Contains(Ncells[i][j])) ? Ncells[i][j] + 1 : 0;
                     if(cells[i][j] == 1)
-                        target.DrawPixel(i, j, ConsoleColor.Yellow);
+                        target.DrawPixel(i, j, ConsoleColor.White);
                 }
             for (int i = 0; i < height; i++)
                 Array.Copy(cells[i], 0, Ncells[i], 0, width);

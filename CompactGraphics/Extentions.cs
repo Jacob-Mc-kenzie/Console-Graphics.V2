@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-namespace CompactGraphics
+namespace ComapactGraphicsV2
 {
     public static class _
     {

@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 
-namespace CompactGraphics
+namespace ComapactGraphicsV2
 {
     public class NativeMethods
     {

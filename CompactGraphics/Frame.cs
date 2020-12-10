@@ -1,5 +1,5 @@
 ﻿using System;
-namespace CompactGraphics
+namespace ComapactGraphicsV2
 {
     /// <summary>
     /// A simple Rectangle with a border widget.
@@ -38,7 +38,7 @@ namespace CompactGraphics
             this.Bounds = r.OffsetPin(this.Pin);
         }
 
-        public override void Draw(Graphics g)
+        public override void Draw(CompactGraphics g)
         {
             for (int i = Bounds.x1; i <= Bounds.x2; i++)
             {
@@ -54,12 +54,12 @@ namespace CompactGraphics
         }
 
 
-        public override void Draw(Graphics g, ConsoleKeyInfo keyInfo)
+        public override void Draw(CompactGraphics g, ConsoleKeyInfo keyInfo)
         {
             Draw(g);
         }
 
-        public override void Draw(Graphics g, Input I)
+        public override void Draw(CompactGraphics g, Input I)
         {
             Draw(g);
         }

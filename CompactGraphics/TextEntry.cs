@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Timers;
 
-namespace CompactGraphics
+namespace ComapactGraphicsV2
 {
     /// <summary>
     /// A simnple Widget based single line text entry feild.
@@ -58,7 +58,7 @@ namespace CompactGraphics
         /// Draws the text entry feild to the screen, draws in reverse from right to left, to enable easier text overflow.
         /// </summary>
         /// <param name="g">the graphics object to draw to</param>
-        public override void Draw(Graphics g)
+        public override void Draw(CompactGraphics g)
         {
             int diffrence = (Bounds.x2 - Bounds.x1);
             int iDif;
@@ -90,7 +90,7 @@ namespace CompactGraphics
         /// </summary>
         /// <param name="g"></param>
         /// <param name="keyInfo"></param>
-        public override void Draw(Graphics g, ConsoleKeyInfo keyInfo)
+        public override void Draw(CompactGraphics g, ConsoleKeyInfo keyInfo)
         {
             if (keyInfo.Key != ConsoleKey.Backspace)
             {

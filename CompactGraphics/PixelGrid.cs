@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using CompactGraphics;
+using ComapactGraphicsV2;
 
-namespace CompactGraphics
+namespace ComapactGraphicsV2
 {
     public class PixelGrid : Widget
     {
@@ -39,7 +39,7 @@ namespace CompactGraphics
                     
             }
         }
-        public override void Draw(Graphics g)
+        public override void Draw(CompactGraphics g)
         {
             g.Draw(rendered, Bounds.x1, Bounds.y1);
 

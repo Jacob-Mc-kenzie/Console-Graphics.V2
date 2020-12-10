@@ -1,4 +1,4 @@
-﻿namespace CompactGraphics
+﻿namespace ComapactGraphicsV2
 {
 
     public class Widget
@@ -59,7 +59,7 @@
         /// Draws the widget to the current frame of the Graphics object
         /// </summary>
         /// <param name="g">The Graphics to draw to</param>
-        public virtual void Draw(Graphics g)
+        public virtual void Draw(CompactGraphics g)
         {
             g.Draw(rendered, Bounds.x1, Bounds.y1);
             rendered = new TFrame(Bounds.x2 - Bounds.x1, Bounds.y2 - Bounds.y1);
@@ -69,11 +69,11 @@
         /// </summary>
         /// <param name="g">The Graphics to draw to</param>
         /// <param name="keyInfo">The User input to be handled.</param>
-        public virtual void Draw(Graphics g, System.ConsoleKeyInfo keyInfo)
+        public virtual void Draw(CompactGraphics g, System.ConsoleKeyInfo keyInfo)
         {
             throw new System.NotImplementedException();
         }
-        public virtual void Draw(Graphics g, Input input)
+        public virtual void Draw(CompactGraphics g, Input input)
         {
             Draw(g);
             //throw new System.NotImplementedException();

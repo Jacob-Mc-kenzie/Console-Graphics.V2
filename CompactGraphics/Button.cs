@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace CompactGraphics
+namespace ComapactGraphicsV2
 {
     public class Button : Textbox
     {
@@ -38,7 +38,7 @@ namespace CompactGraphics
             this.OnClick = method;
         }
 
-        public override void Draw(Graphics g)
+        public override void Draw(CompactGraphics g)
         {
             for (int i = 0; i < Bounds.y2 - Bounds.y1; i++)
             {
@@ -49,7 +49,7 @@ namespace CompactGraphics
             }
         }
 
-        public override void Draw(Graphics g, Input mouse)
+        public override void Draw(CompactGraphics g, Input mouse)
         {
             int[] m = mouse.GetMouse();
             if (Bounds.Overlaps(m[0], m[1]))
