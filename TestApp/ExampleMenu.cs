@@ -19,15 +19,20 @@ namespace TestApp
         int bounce = 0;
         bool t = true;
         int cof = 15;
+        bool firstrun = true;
         int[] rgb = new int[] { 255, 0, 0 };
+        List<int[]> values;
+        ExtendedColors pallet;
         public ExampleMenu(ComapactGraphicsV2.CompactGraphics graphics) : base(graphics)
         {
             test = new Frame('#', new Rect(1, 9, 1, 9),ConsoleColor.White,ConsoleColor.Black, Widget.DrawPoint.Center);
             onPage.Add(test);
-            r = new Rect(20, 80, 5, 35);
+            r = new Rect(20, g.Width-1, 0, g.Height-1);
             content = new Life(80, 60, 100, 50);
+            pallet = new ExtendedColors();
             pixelGrid = new PixelGrid(r);
             onPage.Add(pixelGrid);
+            //onPage.Add(new ListBox(new List<Textbox>(), new Rect(10,40,5,40)));
             //onPage.Add(new Frame('%', r));
             //onPage.Add(new Button(r, "This is some text"));
         }
@@ -36,9 +41,12 @@ namespace TestApp
         {
             base.StepFrame(input);
             //content.Step(pixelGrid);
+            g.Draw($"{rgb[0]}, {rgb[1]}, {rgb[2]}", ConsoleColor.Red, 0, 6);
+            //StepGrid3(pixelGrid,pixelGrid.Width,pixelGrid.Height);
+            StepGrid(pixelGrid, r.width, r.height, cof);
+            //cof = (cof - 1) < 1 ? 15 : cof -1;
+            cof = ((cof + 1) % 14) + 1;
 
-            StepGrid3(pixelGrid,pixelGrid.Width,pixelGrid.Height);
-            //cof = (cof - 1) < 0 ? 15 : cof -1;
             //t = !t;
             //pixelGrid.DrawPixel(5, 4);
             int[] m = input.GetMouse();
@@ -72,14 +80,53 @@ namespace TestApp
         private void StepGrid(PixelGrid grid,int w, int h, int coloroffset)
         {
             //grid.DrawPixel(25, coloroffset % h);
-            for (int i = 0; i < w; i++)
+            //for (int i = 0; i < w; i++)
+            //{
+            //    for (int j = 0; j <= i; j++)
+            //    {
+            //        grid.DrawPixel(i, j, colors[((i + coloroffset) % 14) + 1]);
+            //        grid.DrawPixel(j, i, colors[((i + coloroffset) % 14) + 1]);
+            //    }
+            //}
+            int half = w / 2;
+            //bottm right
+            for (int i = 0; i < half; i++)
             {
                 for (int j = 0; j <= i; j++)
                 {
-                    grid.DrawPixel(i, j, colors[(i + coloroffset) % 15]);
-                    grid.DrawPixel(j, i, colors[(i + coloroffset) % 15]);
+                    grid.DrawPixel(i + half, j + half+1, colors[((i + coloroffset) % 14) + 1]);
+                    grid.DrawPixel(j + half, i + half+1, colors[((i + coloroffset) % 14) + 1]);
                 }
             }
+            ////top left
+            for (int i = half; i > 0; i--)
+            {
+                for (int j = half; j >= i; j--)
+                {
+                    grid.DrawPixel(i, j, colors[(((half - i) + coloroffset) % 14) + 1]);
+                    grid.DrawPixel(j, i, colors[(((half - i) + coloroffset) % 14) + 1]);
+                }
+            }
+            //top right
+            for (int i = 0; i < half; i++)
+            {
+                for (int j = 0; j <= i; j++)
+                {
+                    grid.DrawPixel(i + half, half -j, colors[((i + coloroffset) % 14) + 1]);
+                    grid.DrawPixel(j + half, half -i, colors[((i + coloroffset) % 14) + 1]);
+                }
+            }
+            for (int i = half; i > 0; i--)
+            {
+                for (int j = half; j >= i; j--)
+                {
+                    grid.DrawPixel(i, w-j, colors[(((half - i) + coloroffset) % 14) + 1]);
+                    grid.DrawPixel(j, w-i, colors[(((half - i) + coloroffset) % 14) + 1]);
+                }
+            }
+
+            if (cof % 2 == 1)
+                AddRainbow();
         }
         private void StepGrid2(PixelGrid grid, int w, int h, bool togglestate)
         {
@@ -101,7 +148,7 @@ namespace TestApp
             int color = 1;
             for (int x = 0; x < w; x++)
             {
-                switch(x % lines)
+                switch (x % lines)
                 {
                     case 0:
                         color++;
@@ -115,26 +162,52 @@ namespace TestApp
 
                 }
             }
-            for (int i = 1; i < 16; i++)
+
+            AddRainbow();
+
+        }
+
+        private void AddRainbow()
+        {
+            if (firstrun)
             {
-                rgb = stepRainbow(rgb);
-                ExtendedColors.SetColor((ConsoleColor)i, System.Drawing.Color.FromArgb(rgb[0], rgb[1], rgb[2]));
+                for (int i = 1; i < 16; i++)
+                {
+                    rgb = stepRainbow(rgb);
+                    pallet.SetColor("", System.Drawing.Color.FromArgb(rgb[0], rgb[1], rgb[2]), (ConsoleColor)i);
+                }
+                firstrun = false;
+            }  
+            else
+                ShiftByOne();
+        }
+
+        private void ShiftByOne()
+        {
+            rgb = stepRainbow(rgb);
+            System.Drawing.Color last = pallet.GetColor(ConsoleColor.White);
+            System.Drawing.Color next = System.Drawing.Color.FromArgb(rgb[0], rgb[1], rgb[2]);
+            for (int i = 15; i > 0; i--)
+            {
+                last = pallet.GetColor((ConsoleColor)i);
+                pallet.SetColor("",next,(ConsoleColor)i);
+                next = last;
             }
         }
         private int[] stepRainbow(int[] from)
         {
             if (from[0] == 255 && from[2] < 255 && from[1] == 0)
-                from[2] += 15;
+                from[2] += 51;
             else if (from[2] == 255 && from[0] > 0)
-                from[0] -= 15;
+                from[0] -= 51;
             else if (from[2] == 255 && from[1] < 255)
-                from[1] += 15;
+                from[1] += 51;
             else if (from[1] == 255 && from[2] > 0)
-                from[2] -= 15;
+                from[2] -= 51;
             else if (from[1] == 255 && from[0] < 255)
-                from[0] += 15;
+                from[0] += 51;
             else
-                from[1] -= 15;
+                from[1] -= 51;
 
             return from;
         }

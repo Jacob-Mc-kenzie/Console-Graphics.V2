@@ -130,6 +130,10 @@ namespace ComapactGraphicsV2
                     return extendedColors[i].backing;
             return ConsoleColor.White;
         }
+        public Color GetColor(ConsoleColor inplace)
+        {
+            return extendedColors[(int)inplace].color;
+        }
 
         // Set a specific console color to an RGB color
         // The default console colors used are gray (foreground) and black (background)

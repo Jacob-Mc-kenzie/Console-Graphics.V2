@@ -181,7 +181,72 @@ namespace ComapactGraphicsV2
             public short Right;
             public short Bottom;
         }
-        
+
+        [DllImport("kernel32.dll")]
+        static extern IntPtr GetConsoleWindow();
+
+        [DllImport("user32.dll")]
+        static extern IntPtr MonitorFromWindow(IntPtr hwnd, uint dwFlags);
+
+        const int MONITOR_DEFAULTTOPRIMARY = 1;
+
+        [DllImport("user32.dll")]
+        static extern bool GetMonitorInfo(IntPtr hMonitor, ref MONITORINFO lpmi);
+
+        [StructLayout(LayoutKind.Sequential)]
+        struct MONITORINFO
+        {
+            public uint cbSize;
+            public RECT rcMonitor;
+            public RECT rcWork;
+            public uint dwFlags;
+            public static MONITORINFO Default
+            {
+                get { var inst = new MONITORINFO(); inst.cbSize = (uint)Marshal.SizeOf(inst); return inst; }
+            }
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        struct RECT
+        {
+            public int Left, Top, Right, Bottom;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        struct POINT
+        {
+            public int x, y;
+        }
+
+        [DllImport("user32.dll", SetLastError = true)]
+        static extern bool GetWindowPlacement(IntPtr hWnd, ref WINDOWPLACEMENT lpwndpl);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        static extern bool SetWindowPlacement(IntPtr hWnd, [In] ref WINDOWPLACEMENT lpwndpl);
+
+        const uint SW_RESTORE = 9;
+
+        [StructLayout(LayoutKind.Sequential)]
+        struct WINDOWPLACEMENT
+        {
+            public uint Length;
+            public uint Flags;
+            public uint ShowCmd;
+            public POINT MinPosition;
+            public POINT MaxPosition;
+            public RECT NormalPosition;
+            public static WINDOWPLACEMENT Default
+            {
+                get
+                {
+                    var instance = new WINDOWPLACEMENT();
+                    instance.Length = (uint)Marshal.SizeOf(instance);
+                    return instance;
+                }
+            }
+        }
+
+
         #endregion
         /// <summary>
         /// Initilise the virtual screen at the currrent cosole dimensions.
@@ -198,7 +263,9 @@ namespace ComapactGraphicsV2
         public CompactGraphics(int w, int h)
         {
             // Initilisation=================================
-            Console.SetWindowSize(w, h);
+            int[] wh = ScreenTest(w, h);
+            Console.SetWindowSize(wh[0], wh[1]);
+            Console.SetBufferSize(wh[0], wh[1]);
             Console.CursorVisible = false;
             //Console.OutputEncoding = System.Text.Encoding.ASCII;
             currentFrame = new TFrame(w, h);
@@ -440,28 +507,38 @@ namespace ComapactGraphicsV2
             }
         }
 
-        public void DrawANSI(string st, int x, int y)
+        public static int[] ScreenTest(int width, int height)
         {
-            if (y <= Height)
-            {
-                for (int i = 0; i < st.Length; i++)
-                {
-                    if (x + i <= Width && x + i >= 0)
-                    {
-                        currentFrame.image[y][x + i] = st[i];
-                        
-                    }
-                }
-            }
+            if (width <= Console.LargestWindowWidth && height <= Console.LargestWindowHeight)
+                return new int[] { width, height };
 
-        }
+            Console.WriteLine($"This aplication is designed to run with a console window size of:\n\tWidth: {width}\n\tHeight: {height}\n\nUnfortunatly Your maximum terminal size appears to be:\n\tWidth: {Console.LargestWindowWidth}\n\tHeight: {Console.LargestWindowHeight}\n");
+            Console.WriteLine($"As such the aplication may not function correctly, but will attempt to run at the closest avalible resolution of:\n\tWidth: {(width <= Console.LargestWindowWidth ? width : Console.LargestWindowWidth)}\n\tHeight: {(height <= Console.LargestWindowHeight ? height : Console.LargestWindowHeight)}\n");
+            Console.Write("Press any key to Continue...");
+            Console.ReadKey();
+            Console.Clear();
+            IntPtr hWnd = GetConsoleWindow();
 
-        public void DrawANSI(char c, int x, int y)
-        {
-            if (x < Width && y < Height && x >= 0 && y >= 0)
+            var mi = MONITORINFO.Default;
+            GetMonitorInfo(MonitorFromWindow(hWnd, MONITOR_DEFAULTTOPRIMARY), ref mi);
+
+            // Get information about this window's current placement.
+            var wp = WINDOWPLACEMENT.Default;
+            GetWindowPlacement(hWnd, ref wp);
+
+            int fudgeOffset = 7;
+            wp.NormalPosition = new RECT()
             {
-                currentFrame.image[y][x] = c;
-            }
+                Left = -fudgeOffset,
+                Top = 0,
+                Right = (wp.NormalPosition.Right - wp.NormalPosition.Left),
+                Bottom = fudgeOffset + mi.rcWork.Bottom
+            };
+
+            SetWindowPlacement(hWnd, ref wp);
+
+            return new int[] { (width <= Console.LargestWindowWidth ? width : Console.LargestWindowWidth), (height <= Console.LargestWindowHeight ? height : Console.LargestWindowHeight) };
+
         }
 
 
@@ -501,5 +578,7 @@ namespace ComapactGraphicsV2
             return new Point(x, y);
         }
         #endregion
+
+
     }
 }

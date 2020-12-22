@@ -9,15 +9,20 @@ namespace ComapactGraphicsV2
     /// </summary>
     public struct Rect 
     {
-        public int x1, x2, y1, y2;
+        public int x1, x2, y1, y2, width, height;
         public Rect(int x1, int x2, int y1, int y2)
         {
             this.x1 = x1;
             this.x2 = x2;
             this.y1 = y1;
             this.y2 = y2;
+            width = x2 - x1;
+            height = y2 - y1;
         }
+
     }
+
+
     /// <summary>
     /// Originally intended to be a base class inherited by Menu.cs for overarching gui design, but As I didn't need anything other than menus
     /// was never implemented.

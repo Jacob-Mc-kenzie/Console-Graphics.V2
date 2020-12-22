@@ -13,12 +13,11 @@ namespace TestApp
             if(args.Length == 2)
                 graphics = new CompactGraphics(int.Parse(args[0]),int.Parse(args[1]));
             else
-                graphics = new CompactGraphics(130, 40);
+                graphics = new CompactGraphics(500, 200);
             //CompactGraphics.Graphics.SetColor(ConsoleColor.White, 244, 106, 7);
             ExampleMenu menu = new ExampleMenu(graphics);
             ExtendedColors customPallet = new ExtendedColors();
             Input I = new Input();
-
             customPallet.SetColor("Sea Green", Color.FromArgb(46, 139, 87), ConsoleColor.Green);
             //graphics.FrameCap = 120;
             //Contunually draw frames
@@ -32,11 +31,11 @@ namespace TestApp
                 graphics.Draw($"{graphics.Fps} fps",ConsoleColor.White, 0,0);
                 graphics.Draw($"{graphics.TimeToDraw} drawTime", customPallet.GetColor("Sea Green"), 0, 1);
                 graphics.Draw($"{graphics.TimeToFrame} ttf", ConsoleColor.White, 0, 2);
-                graphics.Draw($"{rgb[0]}, {rgb[1]}, {rgb[2]}", ConsoleColor.Red, 0, 6);
+                //graphics.Draw($"{rgb[0]}, {rgb[1]}, {rgb[2]}", ConsoleColor.Red, 0, 6);
                 //now that all drawing is done, push the frame to the buffer.
                 graphics.pushFrame();
                 //Console.WriteLine("\u001b[31mHello World!\u001b[0m");
-                System.Threading.Thread.Sleep(80);
+                //System.Threading.Thread.Sleep(32);
             }
         }
 
