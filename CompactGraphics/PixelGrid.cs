@@ -46,7 +46,7 @@ namespace ComapactGraphicsV2
             char[][] image;
             ConsoleColor[][] background;
             ConsoleColor[][] forground;
-            int h = Height;
+            int h = Height /2;
             int w = Width;
             
             image = new char[h + 1][];
@@ -68,6 +68,13 @@ namespace ComapactGraphicsV2
             }
 
             rendered = new TFrame(image,background,forground);
+        }
+
+        public override void ReSize(Rect rect)
+        {
+            base.ReSize(rect);
+            Height = (Bounds.y2 - Bounds.y1) * 2;
+            Width = Bounds.x2 - Bounds.x1;
         }
     }
 }

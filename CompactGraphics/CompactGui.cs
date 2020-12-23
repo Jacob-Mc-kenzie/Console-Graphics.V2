@@ -31,7 +31,7 @@ namespace ComapactGraphicsV2
     {
         public static bool Overlaps(this Rect rect, int x, int y)
         {
-            return (x >= rect.x1 && x < rect.x2 && y >= rect.y1 && y < rect.y2);
+            return (x >= rect.x1 && x <= rect.x2 && y >= rect.y1 && y <= rect.y2);
         }
         public static bool Overlaps(this Rect rect, Rect rect2)
         {

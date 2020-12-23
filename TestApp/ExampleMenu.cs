@@ -23,15 +23,25 @@ namespace TestApp
         int[] rgb = new int[] { 255, 0, 0 };
         List<int[]> values;
         ExtendedColors pallet;
+        List<ListItemT> listItems;
         public ExampleMenu(ComapactGraphicsV2.CompactGraphics graphics) : base(graphics)
         {
+            Random rng = new Random();
+            listItems = new List<ListItemT>();
+            for (int i = 0; i < 20; i++)
+            {
+                listItems.Add(new ListItemT() { content = new List<StyledStringT>() { new StyledStringT($"S{rng.Next()}") } });
+            }
             test = new Frame('#', new Rect(1, 9, 1, 9),ConsoleColor.White,ConsoleColor.Black, Widget.DrawPoint.Center);
             onPage.Add(test);
-            r = new Rect(20, g.Width-1, 0, g.Height-1);
+            r = new Rect(20, 40, 0, 20);
             content = new Life(80, 60, 100, 50);
             pallet = new ExtendedColors();
             pixelGrid = new PixelGrid(r);
             onPage.Add(pixelGrid);
+
+
+            onPage.Add(new ListBox(listItems, new Rect(20, 120, 10, 50)));
             //onPage.Add(new ListBox(new List<Textbox>(), new Rect(10,40,5,40)));
             //onPage.Add(new Frame('%', r));
             //onPage.Add(new Button(r, "This is some text"));
@@ -42,8 +52,9 @@ namespace TestApp
             base.StepFrame(input);
             //content.Step(pixelGrid);
             g.Draw($"{rgb[0]}, {rgb[1]}, {rgb[2]}", ConsoleColor.Red, 0, 6);
+            g.Draw($"Frame w: {pixelGrid.Bounds.width}, Frame h: {pixelGrid.Bounds.height}", ConsoleColor.Green, 0, 7);
             //StepGrid3(pixelGrid,pixelGrid.Width,pixelGrid.Height);
-            StepGrid(pixelGrid, r.width, r.height, cof);
+            StepGrid(pixelGrid, r.width, r.height/2, cof);
             //cof = (cof - 1) < 1 ? 15 : cof -1;
             cof = ((cof + 1) % 14) + 1;
 
@@ -58,10 +69,10 @@ namespace TestApp
                 switch (c)
                 {
                     case '=':
-                        content = new Life(80, 60, 100, 30);
+                        pixelGrid.ReSize(new Rect(pixelGrid.Bounds.x1, pixelGrid.Bounds.x2, pixelGrid.Bounds.y1, pixelGrid.Bounds.y2 + 1));
                         break;
                     case '-':
-                        cloc--;
+                        pixelGrid.ReSize(new Rect(pixelGrid.Bounds.x1, pixelGrid.Bounds.x2, pixelGrid.Bounds.y1, pixelGrid.Bounds.y2 - 1));
                         break;
                 }
 

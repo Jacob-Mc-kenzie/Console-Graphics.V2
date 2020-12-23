@@ -23,6 +23,7 @@ namespace ComapactGraphicsV2
         private char c = '\0';
         private int butstate = 0;
         uint recordLen = 0;
+        ushort charcode = 0;
         public Input()
         {
             handle = NativeMethods.GetStdHandle(NativeMethods.STD_INPUT_HANDLE);
@@ -63,6 +64,7 @@ namespace ComapactGraphicsV2
                     case NativeMethods.KEY_EVENT:
                         {
                             c = record.KeyEvent.UnicodeChar;
+                            charcode = record.KeyEvent.wVirtualKeyCode;
                             KeyAvalible = true;
                         }
                         break;
@@ -87,6 +89,18 @@ namespace ComapactGraphicsV2
                 return c;
             }
             return '\0';
+        }
+        /// <summary>
+        /// This method should be used by widgets only.
+        /// </summary>
+        /// <returns></returns>
+        public char ReadLastKey()
+        {
+            return c;
+        }
+        public ConsoleKey GetConsoleKey()
+        {
+            return (ConsoleKey)charcode;
         }
 
         public int[] GetMouse()

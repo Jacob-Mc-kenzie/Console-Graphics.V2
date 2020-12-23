@@ -449,6 +449,31 @@ namespace ComapactGraphicsV2
 
         }
 
+        /// <summary>
+        /// Add a string to the current frame.
+        /// </summary>
+        /// <param name="st">the string to draw</param>
+        /// <param name="forground">the color to draw the string</param>
+        /// /// <param name="background">the background color to draw behind the string</param>
+        /// <param name="x">the x position from the left</param>
+        /// <param name="y">the y position from the top</param>
+        public void Draw(string st, ConsoleColor forground, ConsoleColor background, int x, int y)
+        {
+            if (y <= Height)
+            {
+                for (int i = 0; i < st.Length; i++)
+                {
+                    if (x + i <= Width && x + i >= 0)
+                    {
+                        currentFrame.image[y][x + i] = st[i];
+                        currentFrame.forground[y][x + i] = forground;
+                        currentFrame.background[y][x + i] = background;
+                    }
+                }
+            }
+
+        }
+
         internal void Draw(TFrame frame, int x, int y, ConsoleColor alphaKey = ConsoleColor.Black)
         {
             for (int i = 0; i < frame.image[0].Length; i++)
