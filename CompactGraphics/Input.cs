@@ -13,6 +13,12 @@ namespace ComapactGraphicsV2
         // ToDo:
         // more advanced key state, support for paste, keydown, repeatkey etc.
         //===================
+        public struct inpuT
+        {
+            public bool EventType;
+            public ConsoleKey key;
+            public int MouseX, MouseY;
+        }
         NativeMethods.ConsoleHandle handle;
         NativeMethods.INPUT_RECORD record;
         Thread updateThread;
@@ -56,7 +62,6 @@ namespace ComapactGraphicsV2
                             x = record.MouseEvent.dwMousePosition.X;
                             y = record.MouseEvent.dwMousePosition.Y;
                             butstate = record.MouseEvent.dwButtonState;
-                            KeyAvalible = false;
                             
                         }
                         break;
@@ -65,7 +70,7 @@ namespace ComapactGraphicsV2
                         {
                             c = record.KeyEvent.UnicodeChar;
                             charcode = record.KeyEvent.wVirtualKeyCode;
-                            KeyAvalible = true;
+                            KeyAvalible = record.KeyEvent.bKeyDown;
                         }
                         break;
                 }
@@ -79,16 +84,12 @@ namespace ComapactGraphicsV2
         /// If a key is avalible return it.
         /// </summary>
         /// <returns>the key or null</returns>
-        public char ReadKey(bool display = false)
+        public ConsoleKey ReadKey(bool display = false)
         {
-            if(KeyAvalible)
-            {
-                KeyAvalible = false;
+            KeyAvalible = false;
                 if (display)
                     Console.Write(c);
-                return c;
-            }
-            return '\0';
+                return (ConsoleKey)charcode;
         }
         /// <summary>
         /// This method should be used by widgets only.
@@ -97,10 +98,6 @@ namespace ComapactGraphicsV2
         public char ReadLastKey()
         {
             return c;
-        }
-        public ConsoleKey GetConsoleKey()
-        {
-            return (ConsoleKey)charcode;
         }
 
         public int[] GetMouse()

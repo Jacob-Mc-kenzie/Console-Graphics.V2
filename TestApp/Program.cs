@@ -35,7 +35,7 @@ namespace TestApp
                 //now that all drawing is done, push the frame to the buffer.
                 graphics.pushFrame();
                 //Console.WriteLine("\u001b[31mHello World!\u001b[0m");
-                //System.Threading.Thread.Sleep(32);
+                System.Threading.Thread.Sleep(16);
             }
         }
 

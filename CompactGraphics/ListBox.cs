@@ -60,6 +60,7 @@ namespace ComapactGraphicsV2
 
         int height, width, selectedIndex, pageIndexOffset, pageIndexStep;
         public int SelectedIndex { get => selectedIndex; set => selectedIndex = value; }
+        public bool autoPaginate;
         public ListBox(List<ListItemT> contents, Rect Bounds) : base(Bounds)
         {
             this.contents = contents;
@@ -68,6 +69,12 @@ namespace ComapactGraphicsV2
             borderColor = ConsoleColor.White;
             pageIndexOffset = 0;
             pageIndexStep = height;
+            autoPaginate = false;
+        }
+
+        public ListBox(List<ListItemT> contents, Rect Bounds, bool autoPaginate) : this(contents, Bounds)
+        {
+            this.autoPaginate = autoPaginate;
         }
 
         public bool SetPage(int pageIndex)
@@ -114,18 +121,36 @@ namespace ComapactGraphicsV2
 
         public override void Draw(CompactGraphics g, Input input)
         {
-            ConsoleKey c = input.GetConsoleKey();
-                g.Draw($"key: {c.ToString()}", ConsoleColor.White, 0, 26);
+            
+            g.Draw($"key: {input.ReadLastKey()}", ConsoleColor.White, 0, 26);
             if (input.KeyAvalible)
             {
-                
+                ConsoleKey c = input.ReadKey();
                 switch (c)
                 {
                     case ConsoleKey.UpArrow:
-                        if (selectedIndex > 0) selectedIndex--;
+                        if (selectedIndex > 0)
+                        {
+                            selectedIndex--;
+                            if(autoPaginate && selectedIndex < pageIndexOffset && pageIndexOffset - pageIndexStep >= 0)
+                                pageIndexOffset -= pageIndexStep;
+                        } 
                         break;
                     case ConsoleKey.DownArrow:
-                        if (selectedIndex > 0) selectedIndex++;
+                        if (selectedIndex < contents.Count)
+                        {
+                            selectedIndex++;
+                            if( autoPaginate && selectedIndex >= pageIndexOffset+pageIndexStep && pageIndexOffset + pageIndexStep < contents.Count)
+                                pageIndexOffset += pageIndexStep;
+                        }
+                        break;
+                    case ConsoleKey.RightArrow:
+                        if (pageIndexOffset + pageIndexStep < contents.Count)
+                            pageIndexOffset += pageIndexStep;
+                        break;
+                    case ConsoleKey.LeftArrow:
+                        if (pageIndexOffset - pageIndexStep >= 0)
+                            pageIndexOffset -= pageIndexStep;
                         break;
                 }
             }

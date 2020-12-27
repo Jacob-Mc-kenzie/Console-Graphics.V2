@@ -28,7 +28,7 @@ namespace TestApp
         {
             Random rng = new Random();
             listItems = new List<ListItemT>();
-            for (int i = 0; i < 20; i++)
+            for (int i = 0; i < 200; i++)
             {
                 listItems.Add(new ListItemT() { content = new List<StyledStringT>() { new StyledStringT($"S{rng.Next()}") } });
             }
@@ -38,10 +38,10 @@ namespace TestApp
             content = new Life(80, 60, 100, 50);
             pallet = new ExtendedColors();
             pixelGrid = new PixelGrid(r);
-            onPage.Add(pixelGrid);
+            //onPage.Add(pixelGrid);
 
 
-            onPage.Add(new ListBox(listItems, new Rect(20, 120, 10, 50)));
+            onPage.Add(new ListBox(listItems, new Rect(20, 120, 10, 20),true));
             //onPage.Add(new ListBox(new List<Textbox>(), new Rect(10,40,5,40)));
             //onPage.Add(new Frame('%', r));
             //onPage.Add(new Button(r, "This is some text"));
@@ -64,14 +64,14 @@ namespace TestApp
             if (input.KeyAvalible && bounce > 3)
             {
                 bounce = 0;
-                char c = input.ReadKey();
-                lastknown = c;
+                ConsoleKey c = input.ReadKey();
+                lastknown = c.ToString()[0];
                 switch (c)
                 {
-                    case '=':
+                    case ConsoleKey.OemPlus:
                         pixelGrid.ReSize(new Rect(pixelGrid.Bounds.x1, pixelGrid.Bounds.x2, pixelGrid.Bounds.y1, pixelGrid.Bounds.y2 + 1));
                         break;
-                    case '-':
+                    case ConsoleKey.OemMinus:
                         pixelGrid.ReSize(new Rect(pixelGrid.Bounds.x1, pixelGrid.Bounds.x2, pixelGrid.Bounds.y1, pixelGrid.Bounds.y2 - 1));
                         break;
                 }
