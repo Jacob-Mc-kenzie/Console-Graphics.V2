@@ -27,6 +27,14 @@ namespace ComapactGraphicsV2
     public struct ListItemT
     {
         public List<StyledStringT> content;
+        public ListItemT(StyledStringT basicContent)
+        {
+            content = new List<StyledStringT>() { basicContent };
+        }
+        public ListItemT(List<StyledStringT> content)
+        {
+            this.content = content;
+        }
         public void Draw(CompactGraphics g, int x, int y, int maxX)
         {
             int offset = 0;
@@ -119,14 +127,14 @@ namespace ComapactGraphicsV2
                 }
         }
 
-        public override void Draw(CompactGraphics g, Input input)
+        public override void Draw(CompactGraphics g, Input.inpuT input)
         {
             
-            g.Draw($"key: {input.ReadLastKey()}", ConsoleColor.White, 0, 26);
+            g.Draw($"key: {input.key}", ConsoleColor.White, 0, 26);
             if (input.KeyAvalible)
             {
-                ConsoleKey c = input.ReadKey();
-                switch (c)
+                
+                switch (input.key)
                 {
                     case ConsoleKey.UpArrow:
                         if (selectedIndex > 0)

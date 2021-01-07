@@ -86,11 +86,6 @@ namespace ComapactGraphicsV2
         {
             lines = text.Wrap(Math.Abs(baseBounds.x2 - baseBounds.x1));
         }
-        public override void Draw(CompactGraphics g, ConsoleKeyInfo keyInfo)
-        {
-            Draw(g);
-            //ToDo
-        }
 
 
     }

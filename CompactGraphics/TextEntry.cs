@@ -103,6 +103,24 @@ namespace ComapactGraphicsV2
             }
             Draw(g);
         }
+        /// <summary>
+        /// Update the text entry with a key input then draw to the screen buffer.
+        /// </summary>
+        /// <param name="g"></param>
+        /// <param name="keyInfo"></param>
+        public override void Draw(CompactGraphics g, Input.inpuT keyInfo)
+        {
+            if (keyInfo.key != ConsoleKey.Backspace)
+            {
+                text += keyInfo.KeyChar;
+            }
+            else if (keyInfo.key == ConsoleKey.Backspace)
+            {
+                if (text.Length > 0)
+                    text = text.Remove(text.Length - 1);
+            }
+            Draw(g);
+        }
 
     }
 }

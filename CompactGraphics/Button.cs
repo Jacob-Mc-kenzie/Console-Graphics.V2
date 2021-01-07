@@ -11,7 +11,7 @@ namespace ComapactGraphicsV2
         ConsoleColor ClickColor;
         ConsoleColor tempfor, tempback;
         int mouseDown;
-        Func<Input, int> OnClick;
+        Func<Input.inpuT, int> OnClick;
         public Button(Rect bounds, string text) : base(text, bounds)
         {
             forColor = ConsoleColor.Black;
@@ -20,7 +20,7 @@ namespace ComapactGraphicsV2
             ClickColor = ConsoleColor.DarkGray;
             tempfor = ConsoleColor.Black;
             mouseDown = 0;
-            OnClick = (Input i) => { return -1; };
+            OnClick = (Input.inpuT i) => { return -1; };
         }
         public Button(Rect bounds, string text, ConsoleColor forground, ConsoleColor background) : this(bounds, text)
         {
@@ -33,7 +33,7 @@ namespace ComapactGraphicsV2
             this.ClickColor = click_bg;
             this.tempfor = mouse_fg;
         }
-        public void BindOnClick(Func<Input, int> method)
+        public void BindOnClick(Func<Input.inpuT, int> method)
         {
             this.OnClick = method;
         }
@@ -49,12 +49,12 @@ namespace ComapactGraphicsV2
             }
         }
 
-        public override void Draw(CompactGraphics g, Input mouse)
+        public override void Draw(CompactGraphics g, Input.inpuT mouse)
         {
-            int[] m = mouse.GetMouse();
-            if (Bounds.Overlaps(m[0], m[1]))
+
+            if (Bounds.Overlaps(mouse.MouseX, mouse.MouseY))
             {
-                switch (mouse.GetMouseState())
+                switch (mouse.buttonState)
                 {
                     case 0:
                         tempback = hover_color;

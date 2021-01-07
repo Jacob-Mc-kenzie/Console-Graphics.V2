@@ -78,6 +78,11 @@
             Draw(g);
             //throw new System.NotImplementedException();
         }
+
+        public virtual void Draw(CompactGraphics g, Input.inpuT input)
+        {
+            Draw(g);
+        }
         /// <summary>
         /// Using the initilised bounds, re-align the widget.
         /// </summary>
