@@ -131,36 +131,32 @@ namespace ComapactGraphicsV2
         {
             
             g.Draw($"key: {input.key}", ConsoleColor.White, 0, 26);
-            if (input.KeyAvalible)
+            switch (input.key)
             {
-                
-                switch (input.key)
-                {
-                    case ConsoleKey.UpArrow:
-                        if (selectedIndex > 0)
-                        {
-                            selectedIndex--;
-                            if(autoPaginate && selectedIndex < pageIndexOffset && pageIndexOffset - pageIndexStep >= 0)
-                                pageIndexOffset -= pageIndexStep;
-                        } 
-                        break;
-                    case ConsoleKey.DownArrow:
-                        if (selectedIndex < contents.Count)
-                        {
-                            selectedIndex++;
-                            if( autoPaginate && selectedIndex >= pageIndexOffset+pageIndexStep && pageIndexOffset + pageIndexStep < contents.Count)
-                                pageIndexOffset += pageIndexStep;
-                        }
-                        break;
-                    case ConsoleKey.RightArrow:
-                        if (pageIndexOffset + pageIndexStep < contents.Count)
-                            pageIndexOffset += pageIndexStep;
-                        break;
-                    case ConsoleKey.LeftArrow:
-                        if (pageIndexOffset - pageIndexStep >= 0)
+                case ConsoleKey.UpArrow:
+                    if (selectedIndex > 0)
+                    {
+                        selectedIndex--;
+                        if (autoPaginate && selectedIndex < pageIndexOffset && pageIndexOffset - pageIndexStep >= 0)
                             pageIndexOffset -= pageIndexStep;
-                        break;
-                }
+                    }
+                    break;
+                case ConsoleKey.DownArrow:
+                    if (selectedIndex < contents.Count-1)
+                    {
+                        selectedIndex++;
+                        if (autoPaginate && selectedIndex >= pageIndexOffset + pageIndexStep && pageIndexOffset + pageIndexStep < contents.Count-1)
+                            pageIndexOffset += pageIndexStep;
+                    }
+                    break;
+                case ConsoleKey.RightArrow:
+                    if (pageIndexOffset + pageIndexStep < contents.Count)
+                        pageIndexOffset += pageIndexStep;
+                    break;
+                case ConsoleKey.LeftArrow:
+                    if (pageIndexOffset - pageIndexStep >= 0)
+                        pageIndexOffset -= pageIndexStep;
+                    break;
             }
             Draw(g);
         }

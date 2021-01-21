@@ -162,7 +162,7 @@ namespace ComapactGraphicsV2
 
         public inpuT GetInput()
         {
-            return new inpuT() { key = ReadKey(), MouseX = x, MouseY = y, buttonState = butstate, KeyAvalible = KeyAvalible, KeyChar =  };
+            return new inpuT() { key = ReadKey(), MouseX = x, MouseY = y, buttonState = butstate, KeyAvalible = KeyAvalible, KeyChar =  c};
         }
 
     }

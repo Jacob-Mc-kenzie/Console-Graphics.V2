@@ -21,6 +21,9 @@ namespace ComapactGraphicsV2
         /// </summary>
         public int Status { get { return status; } }
         protected int status;
+
+
+
         public Menu()
         {
             throw new Exception("Cannot call default constructor");
@@ -28,6 +31,7 @@ namespace ComapactGraphicsV2
         public Menu(CompactGraphics g)
         {
             this.g = g;
+            status = -1;
             onPage = new List<Widget>();
         }
         /// <summary>
@@ -57,6 +61,17 @@ namespace ComapactGraphicsV2
         /// </summary>
         /// <param name="input">The input to handle</param>
         public virtual void StepFrame(Input input)
+        {
+            foreach (Widget widget in onPage)
+            {
+                widget.Draw(g, input);
+            }
+        }
+        /// <summary>
+        /// Updates and adds all the current widgets to the frame, passing user input.
+        /// </summary>
+        /// <param name="input">The current user input value</param>
+        public virtual void StepFrame(Input.inpuT input)
         {
             foreach (Widget widget in onPage)
             {
