@@ -34,6 +34,11 @@ namespace ComapactGraphicsV2
             status = -1;
             onPage = new List<Widget>();
         }
+
+        public Menu(CompactGraphics g, object state): this(g)
+        {
+
+        }
         /// <summary>
         /// Steps to the next frame by adding all the widgets to the current frame.
         /// DOES NOT PUSH
@@ -53,7 +58,10 @@ namespace ComapactGraphicsV2
         {
             foreach (Widget widget in onPage)
             {
-                widget.Draw(g, keyinfo);
+                if (widget.Selected)
+                    widget.Draw(g, keyinfo);
+                else
+                    widget.Draw(g);
             }
         }
         /// <summary>
@@ -64,7 +72,10 @@ namespace ComapactGraphicsV2
         {
             foreach (Widget widget in onPage)
             {
-                widget.Draw(g, input);
+                if (widget.Selected)
+                    widget.Draw(g, input);
+                else
+                    widget.Draw(g);
             }
         }
         /// <summary>
@@ -75,7 +86,10 @@ namespace ComapactGraphicsV2
         {
             foreach (Widget widget in onPage)
             {
-                widget.Draw(g, input);
+                if (widget.Selected)
+                    widget.Draw(g, input);
+                else
+                    widget.Draw(g);
             }
         }
     }

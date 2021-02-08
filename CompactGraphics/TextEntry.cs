@@ -122,5 +122,34 @@ namespace ComapactGraphicsV2
             Draw(g);
         }
 
+        public bool IsSelected()
+        {
+            return Selected;
+        }
+
+        public bool IsActive()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool AwaitingNav()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Type NavDestination(object state)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Select()
+        {
+            this.Selected = true;
+        }
+
+        public void Deselect()
+        {
+            this.Selected = false;
+        }
     }
 }

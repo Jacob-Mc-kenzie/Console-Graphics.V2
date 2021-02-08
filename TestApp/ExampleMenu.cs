@@ -14,7 +14,7 @@ namespace TestApp
         static ConsoleColor[] colors = { (ConsoleColor)0, (ConsoleColor)1, (ConsoleColor)2, (ConsoleColor)3, (ConsoleColor)4, (ConsoleColor)6, (ConsoleColor)7, (ConsoleColor)8, (ConsoleColor)9, (ConsoleColor)10, (ConsoleColor)11, (ConsoleColor)12, (ConsoleColor)13, (ConsoleColor)14, (ConsoleColor)15 };
         Rect r;
         Life content;
-        PixelGrid pixelGrid;
+        PixelGrid pixelGrid, testGrid;
         int cloc = 1000;
         int bounce = 0;
         bool t = true;
@@ -34,14 +34,16 @@ namespace TestApp
             }
             test = new Frame('#', new Rect(1, 9, 1, 9),ConsoleColor.White,ConsoleColor.Black, Widget.DrawPoint.Center);
             onPage.Add(test);
-            r = new Rect(20, 40, 0, 20);
+            r = new Rect(20, 40, 40, 60);
             content = new Life(80, 60, 100, 50);
             pallet = new ExtendedColors();
             pixelGrid = new PixelGrid(r);
-            //onPage.Add(pixelGrid);
+            testGrid = new PixelGrid(new Rect(10, 50, 30, 70));
+            //onPage.Add(testGrid);
+            onPage.Add(pixelGrid);
 
 
-            onPage.Add(new ListBox(listItems, new Rect(20, 120, 10, 20),true));
+            //onPage.Add(new ListBox(listItems, new Rect(20, 120, 10, 20),true));
             //onPage.Add(new ListBox(new List<Textbox>(), new Rect(10,40,5,40)));
             //onPage.Add(new Frame('%', r));
             //onPage.Add(new Button(r, "This is some text"));
@@ -54,7 +56,8 @@ namespace TestApp
             g.Draw($"{rgb[0]}, {rgb[1]}, {rgb[2]}", ConsoleColor.Red, 0, 6);
             g.Draw($"Frame w: {pixelGrid.Bounds.width}, Frame h: {pixelGrid.Bounds.height}", ConsoleColor.Green, 0, 7);
             //StepGrid3(pixelGrid,pixelGrid.Width,pixelGrid.Height);
-            StepGrid(pixelGrid, r.width, r.height/2, cof);
+            //StepGrid(pixelGrid, r.width, r.height/2, cof);
+            StepGrid2(pixelGrid, pixelGrid.Width, pixelGrid.Height, true);
             //cof = (cof - 1) < 1 ? 15 : cof -1;
             cof = ((cof + 1) % 14) + 1;
 
@@ -147,10 +150,18 @@ namespace TestApp
                 for (int x = 0; x < w; x++)
                 {
                     if (toggle)
-                        grid.DrawPixel(y, x);
+                        grid.DrawPixel(x, y);
                     toggle = !toggle;
                 }
                 toggle = !toggle;
+            }
+            for (int y = 0; y < testGrid.Height; y++)
+            {
+                for (int x = 0; x < testGrid.Width; x++)
+                {
+                    //testGrid.DrawPixel(x, y, ConsoleColor.Black);
+                }
+                g.Draw($"{y}.", ConsoleColor.White, 9, 30 + y);
             }
         }
         private void StepGrid3(PixelGrid grid, int w, int h)

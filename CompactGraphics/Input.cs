@@ -137,7 +137,7 @@ namespace ComapactGraphicsV2
                     Console.Write(this.c);
                 return (ConsoleKey)charcode;
             }
-            ConsoleKeyInfo c = Console.ReadKey(display);
+            ConsoleKeyInfo c = Console.ReadKey(!display);
             this.c = c.KeyChar;
             return c.Key;
         }

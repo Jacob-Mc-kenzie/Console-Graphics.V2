@@ -16,6 +16,7 @@
             this.Bounds = bounds;
             this.rendered = new TFrame(bounds.x2 - bounds.x1, bounds.y2 - bounds.y1);
             this.forColor = System.ConsoleColor.White;
+            this.Selected = false;
 
         }
         /// <summary>
@@ -47,6 +48,10 @@
         /// Un-used, intended to speed up draw times of infrequently updated widgets with complex draw cycles.
         /// </summary>
         internal TFrame rendered;
+        /// <summary>
+        /// If the widget is active for user input and navigation
+        /// </summary>
+        public bool Selected;
         /// <summary>
         /// Update the forground color of a widget.
         /// </summary>

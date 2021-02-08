@@ -24,19 +24,86 @@ namespace ComapactGraphicsV2
 
 
     /// <summary>
-    /// Originally intended to be a base class inherited by Menu.cs for overarching gui design, but As I didn't need anything other than menus
-    /// was never implemented.
+    /// A wrapper for easy Navigation between Menus
+    /// 
     /// </summary>
-    public static class CompactGui
+    public class CompactGui
     {
-        public static bool Overlaps(this Rect rect, int x, int y)
+        private struct NavItemT
         {
-            return (x >= rect.x1 && x <= rect.x2 && y >= rect.y1 && y <= rect.y2);
+            public string name;
+            public int stackLocation;
+            public Type value;
+            public object state;
         }
-        public static bool Overlaps(this Rect rect, Rect rect2)
+        Dictionary<string,NavItemT> NavHyrachy;
+        int currentIndex;
+        List<string> TravelLog;
+        CompactGraphics g;
+        Menu current;
+        Type IndexMenu;
+
+        public CompactGui(CompactGraphics g)
         {
-            return !(rect.x2 < rect2.x1 || rect.x1 > rect2.x2 || rect.y2 < rect2.y1 || rect.y1 > rect2.y2);
-            //return (((rect.x1 >= rect2.x1 && rect.x1 < rect2.x2) || (rect.x2 >= rect2.x1 && rect.x2 < rect2.x2)) && ((rect.y1 >= rect2.y1 && rect.y1 < rect2.y2) || (rect.y2 >= rect.y1 && rect.y2 < rect2.y2)));    
+            NavHyrachy = new Dictionary<string, NavItemT>();
+            TravelLog = new List<string>();
+            currentIndex = -1;
+            this.g = g;
+            current = new Menu(g);
+            IndexMenu = typeof(Menu);
         }
+        public CompactGui(CompactGraphics g, Menu Index) : this(g)
+        {
+            current = Index;
+            IndexMenu = Index.GetType();
+        }
+
+        public bool AddNavItem(Type menu, string name)
+        {
+            if (DoesExist(name))
+                return false;
+            NavHyrachy.Add(name, new NavItemT() { name = name, stackLocation = ++currentIndex, value = menu });
+            return true;
+        }
+        public bool GoBack(out Menu result)
+        {
+            result = new Menu(g);
+            if (TravelLog.Count == 0)
+                return false;
+            NavItemT desired = NavHyrachy[ListPop(TravelLog)];
+            result = (Menu)Activator.CreateInstance(desired.value, g, desired.state);
+            return true;
+            
+        }
+
+        public void Step(Input.inpuT userInput)
+        {
+
+        }
+
+        private bool DoesExist(string name)
+        {
+            return NavHyrachy.ContainsKey(name);
+        }
+        private bool NavigateTo(string name)
+        {
+            if (!DoesExist(name))
+                return false;
+            NavItemT desired = NavHyrachy[name];
+            current = (Menu)Activator.CreateInstance(desired.value, g, desired.state);
+            return true;
+
+        }
+        private bool NavigateTo(string name, object state)
+        {
+            return false;
+        }
+        private T ListPop<T>(List<T> list)
+        {
+            T item = list[list.Count - 1];
+            list.RemoveAt(list.Count - 1);
+            return item;
+        }
+
     }
 }
