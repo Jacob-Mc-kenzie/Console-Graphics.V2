@@ -69,12 +69,12 @@ namespace ComapactGraphicsV2
 
         public override void Draw(CompactGraphics g)
         {
-            for (int i = 0; i < lines.Count; i++)
+            int offset = 0;
+            if (lines.Count-1 > Bounds.height)
+                offset = lines.Count - Bounds.height;
+            for (int i = offset; i < lines.Count; i++)
             {
-                if (Bounds.y1 + i <= Bounds.y2)
-                {
-                    g.Draw(lines[i], forColor, Bounds.x1, Bounds.y1 + i);
-                }
+                g.Draw(lines[i], forColor, Bounds.x1, Bounds.y1 + i- offset);
             }
 
         }
