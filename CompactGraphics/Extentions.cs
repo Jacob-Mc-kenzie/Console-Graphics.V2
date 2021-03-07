@@ -33,6 +33,47 @@ namespace ComapactGraphicsV2
                 lines.Add(currentline);
             return lines;
         }
+        private static ColoredStringT [] SplitWords(this List<ColoredStringT> strings)
+        {
+            List<ColoredStringT> words = new List<ColoredStringT>();
+            foreach (var item in strings)
+                foreach (var word in item.text.Split(' '))
+                    words.Add(new ColoredStringT() { text = word, background = item.background, forground = item.forground });
+            return words.ToArray();
+        }
+
+        /// <summary>
+        /// returns a list of Styled Strings wrapped to a specified length;
+        /// </summary>
+        /// <param name="text">the text to wrap</param>
+        /// <param name="maxLenght">the max line length in characters</param>
+        /// <returns></returns>
+        public static List<StyledTextT> Wrap(this StyledTextT text, int maxLenght)
+        {
+            if (text.content.Count == 0 || text.Length < maxLenght) return new List<StyledTextT>() {text};
+            ColoredStringT[] segmants = text.content.SplitWords();
+
+            List<StyledTextT> lines = new List<StyledTextT>();
+            StyledTextT currentline = new StyledTextT();
+
+            foreach (ColoredStringT word in segmants)
+            {
+                if ((currentline.Length > maxLenght) || (currentline.Length + word.text.Length) > maxLenght)
+                {
+                    lines.Add(currentline);
+                    currentline = new StyledTextT();
+                }
+                if (currentline.Length > 0)
+                {
+                    currentline.Add(new ColoredStringT() { text = " " + word.text, background = word.background, forground = word.forground });
+                }
+                else
+                    currentline.Add(word);
+            }
+            if (currentline.Length > 0)
+                lines.Add(currentline);
+            return lines;
+        }
 
         /// <summary>
         /// Calculates the new 'top left' to draw from, and bounds to draw in.

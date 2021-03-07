@@ -4,64 +4,10 @@ using System.Text;
 using ComapactGraphicsV2;
 namespace ComapactGraphicsV2
 {
-    public struct StyledStringT
-    {
-        public string text;
-
-        public StyledStringT(string text)
-        {
-            this.text = text;
-            forground = ConsoleColor.White;
-            background = ConsoleColor.Black;
-        }
-
-        public StyledStringT(string text, ConsoleColor forground, ConsoleColor background) : this(text)
-        {
-            this.forground = forground;
-            this.background = background;
-        }
-
-        public ConsoleColor forground;
-        public ConsoleColor background;
-    }
-    public struct ListItemT
-    {
-        public List<StyledStringT> content;
-        public ListItemT(StyledStringT basicContent)
-        {
-            content = new List<StyledStringT>() { basicContent };
-        }
-        public ListItemT(List<StyledStringT> content)
-        {
-            this.content = content;
-        }
-        public void Draw(CompactGraphics g, int x, int y, int maxX)
-        {
-            int offset = 0;
-            foreach (var item in content)
-            {
-                g.Draw(item.text, item.forground, item.background, x + offset, y);
-                offset += item.text.Length;
-            }
-        }
-        public void DrawHighlighted(CompactGraphics g, int x, int y, int maxX)
-        {
-            int offset = 0;
-            ConsoleColor invert(ConsoleColor color)
-            {
-                return color == ConsoleColor.Black ? ConsoleColor.White : color == ConsoleColor.White ? ConsoleColor.Black : color == ConsoleColor.Yellow ? ConsoleColor.DarkYellow : color == ConsoleColor.Blue ? ConsoleColor.DarkBlue : color;
-            }
-            foreach (var item in content)
-            {
-                g.Draw(item.text, invert(item.forground), invert(item.background), x + offset, y);
-                offset += item.text.Length;
-            }
-        }
-    }
     public class ListBox : Widget
     {
-        private List<ListItemT> contents;
-        public List<ListItemT> Contents { get => contents; }
+        private List<StyledTextT> contents;
+        public List<StyledTextT> Contents { get => contents; }
         public bool Border = true;
         public ConsoleColor borderColor;
         public ConsoleColor TextColor { get => forColor; set => forColor = value; }
@@ -69,7 +15,7 @@ namespace ComapactGraphicsV2
         int height, width, selectedIndex, pageIndexOffset, pageIndexStep;
         public int SelectedIndex { get => selectedIndex; set => selectedIndex = value; }
         public bool autoPaginate;
-        public ListBox(List<ListItemT> contents, Rect Bounds) : base(Bounds)
+        public ListBox(List<StyledTextT> contents, Rect Bounds) : base(Bounds)
         {
             this.contents = contents;
             height = Bounds.y2 - Bounds.y1;
@@ -80,7 +26,7 @@ namespace ComapactGraphicsV2
             autoPaginate = false;
         }
 
-        public ListBox(List<ListItemT> contents, Rect Bounds, bool autoPaginate) : this(contents, Bounds)
+        public ListBox(List<StyledTextT> contents, Rect Bounds, bool autoPaginate) : this(contents, Bounds)
         {
             this.autoPaginate = autoPaginate;
         }

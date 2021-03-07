@@ -23,9 +23,9 @@ namespace TestApp
             //Contunually draw frames
             while (true)
             {
-                //rgb = stepRainbow(rgb);
+                rgb = stepRainbow(rgb);
                 //graphics.AddToPallet(Color.FromArgb(rgb[0], rgb[1], rgb[2]));
-                //ExtendedColors.SetColor(ConsoleColor.White,Color.FromArgb(rgb[0], rgb[1], rgb[2]));
+                ExtendedColors.SetColor(ConsoleColor.White,Color.FromArgb(rgb[0], rgb[1], rgb[2]));
                 //update the UI
                 menu.StepFrame(I);
                 graphics.Draw($"{graphics.Fps} fps",ConsoleColor.White, 0,0);
@@ -35,7 +35,6 @@ namespace TestApp
                 //now that all drawing is done, push the frame to the buffer.
                 graphics.pushFrame();
                 //Console.WriteLine("\u001b[31mHello World!\u001b[0m");
-                System.Threading.Thread.Sleep(16);
             }
         }
 

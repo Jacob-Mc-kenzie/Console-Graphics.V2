@@ -16,8 +16,8 @@ namespace ComapactGraphicsV2
             this.x2 = x2;
             this.y1 = y1;
             this.y2 = y2;
-            width = x2 - x1;
-            height = y2 - y1;
+            width = Math.Abs(x2 - x1);
+            height = Math.Abs(y2 - y1);
         }
 
     }

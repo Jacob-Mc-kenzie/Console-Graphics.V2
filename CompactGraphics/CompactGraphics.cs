@@ -105,7 +105,7 @@ namespace ComapactGraphicsV2
         /// </summary>
         public int FrameTime
         {
-            get { return (fps > 0 ?  (900 /fps) : 0) + 1; }
+            get { return ((framedelay - TimeToFrame)) > 0 ? framedelay - TimeToFrame + 1 : 0; }
             set { }
         }
         /// <summary>
@@ -123,9 +123,14 @@ namespace ComapactGraphicsV2
         public int FrameCap
         {
             get { return 1000 / (framedelay + 1); }
-            set { framedelay = (value > 0 ? 1000/(value + 1)  : 1); }
+            set { framedelay = (value > 0 ? 1000/(value) == 0 ? 1 : 1000/value  : 1); }
         }
-
+        private int FTFPS()
+        {
+            return ((framedelay - TimeToFrame)) > 0 ? framedelay - TimeToFrame + 1 : 0;
+        }
+        private delegate int FrameTimeDelegate();
+        private FrameTimeDelegate FPS_FrameGet;
         #region native imports
         [DllImport("Kernel32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
         static extern SafeFileHandle CreateFile(
@@ -274,6 +279,8 @@ namespace ComapactGraphicsV2
             rect = new SmallRect() { Left = 0, Top = 0, Right = (short)w, Bottom = (short)h };
             this.f = CreateFile("CONOUT$", 0x40000000, 2, IntPtr.Zero, FileMode.Open, 0, IntPtr.Zero);
 
+            FPS_FrameGet = new FrameTimeDelegate(FTFPS);
+
             Height = h;
             Width = w;
             maxQueueLength = 3;
@@ -303,10 +310,13 @@ namespace ComapactGraphicsV2
         /// </summary>
         private void updateFps()
         {
+            
             while (keepgoing)
             {
-                fps = (frame_Counter - last_frame_count);
-                last_frame_count = frame_Counter;
+                int ft = FPS_FrameGet();
+                if (ft > 1)
+                    fps =(int) (1.0 / ((ft+1) / 1000.0));//(frame_Counter - last_frame_count);
+                //last_frame_count = frame_Counter;
                 Thread.Sleep(1000);
             }
         }
@@ -358,10 +368,9 @@ namespace ComapactGraphicsV2
                 {
                     timeOfLastDraw = DateTime.Now.Millisecond;
                     update(frameQueue.Dequeue());
-                    TimeToDraw = Math.Max(0, DateTime.Now.Millisecond - timeOfLastDraw);
+                    TimeToDraw = Math.Max(1, DateTime.Now.Millisecond - timeOfLastDraw);
                 }
-                
-                //Thread.Sleep(framedelay);
+                Thread.Sleep(framedelay);
 
             }
         }
@@ -387,7 +396,7 @@ namespace ComapactGraphicsV2
             }
             TimeToFrame = Math.Max(0,DateTime.Now.Millisecond - timeOfLastFrame);
             
-            //Thread.Sleep(FrameTime);
+            Thread.Sleep(FrameTime);
             timeOfLastFrame = System.DateTime.Now.Millisecond;
         }
 

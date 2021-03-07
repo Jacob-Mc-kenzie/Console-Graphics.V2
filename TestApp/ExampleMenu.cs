@@ -23,14 +23,14 @@ namespace TestApp
         int[] rgb = new int[] { 255, 0, 0 };
         List<int[]> values;
         ExtendedColors pallet;
-        List<ListItemT> listItems;
+        List<StyledTextT> listItems;
         public ExampleMenu(ComapactGraphicsV2.CompactGraphics graphics) : base(graphics)
         {
             Random rng = new Random();
-            listItems = new List<ListItemT>();
+            listItems = new List<StyledTextT>();
             for (int i = 0; i < 200; i++)
             {
-                listItems.Add(new ListItemT() { content = new List<StyledStringT>() { new StyledStringT($"S{rng.Next()}") } });
+                listItems.Add(new StyledTextT() { content = new List<ColoredStringT>() { new ColoredStringT($"S{rng.Next()}") } });
             }
             test = new Frame('#', new Rect(1, 9, 1, 9),ConsoleColor.White,ConsoleColor.Black, Widget.DrawPoint.Center);
             onPage.Add(test);
@@ -43,7 +43,7 @@ namespace TestApp
             onPage.Add(pixelGrid);
 
 
-            //onPage.Add(new ListBox(listItems, new Rect(20, 120, 10, 20),true));
+            onPage.Add(new ListBox(listItems, new Rect(20, 120, 10, 20),true));
             //onPage.Add(new ListBox(new List<Textbox>(), new Rect(10,40,5,40)));
             //onPage.Add(new Frame('%', r));
             //onPage.Add(new Button(r, "This is some text"));
