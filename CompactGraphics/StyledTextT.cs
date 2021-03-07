@@ -23,10 +23,14 @@ namespace ComapactGraphicsV2
         public ConsoleColor background;
     }
 
-    public struct StyledTextT
+    public class StyledTextT
     {
         public List<ColoredStringT> content;
         public int Length { get; private set; }
+        public StyledTextT()
+        {
+            content = new List<ColoredStringT>();
+        }
         public StyledTextT(ColoredStringT basicContent)
         {
             content = new List<ColoredStringT>() { basicContent };
@@ -35,6 +39,7 @@ namespace ComapactGraphicsV2
         public StyledTextT(List<ColoredStringT> content)
         {
             int L = 0;
+            content = new List<ColoredStringT>();
             this.content = content;
             foreach (var item in content)
             {
@@ -47,6 +52,11 @@ namespace ComapactGraphicsV2
         {
             content.Add(item);
             Length += item.text.Length;
+        }
+        public void Add(StyledTextT items)
+        {
+            content.AddRange(items.content);
+            Length += items.Length;
         }
         public void Draw(CompactGraphics g, int x, int y, int maxX)
         {

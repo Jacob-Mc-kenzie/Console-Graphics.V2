@@ -67,6 +67,7 @@ namespace ComapactGraphicsV2
         /// To add, carosell like barrier X for stratup, lists, radio buttons, password entry.
         /// 
         ///
+        public static ConsoleColor[] colors = { (ConsoleColor)0, (ConsoleColor)1, (ConsoleColor)2, (ConsoleColor)3, (ConsoleColor)4, (ConsoleColor)6, (ConsoleColor)7, (ConsoleColor)8, (ConsoleColor)9, (ConsoleColor)10, (ConsoleColor)11, (ConsoleColor)12, (ConsoleColor)13, (ConsoleColor)14, (ConsoleColor)15 };
         private int framedelay = 0; // the delay between buffered frames being drawn.
         private int maxQueueLength; // The maximum lenght of the buffer.
         private TFrame currentFrame;
